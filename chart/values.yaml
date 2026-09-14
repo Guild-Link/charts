@@ -3,6 +3,7 @@ images:
   cf-router: ghcr.io/guild-link/cf-router@sha256:b03259638788421f93b3008cdd88f4e2227e3e65f177dc1f43c2b49d3f72b9ad
   backend: ghcr.io/guild-link/backend@sha256:b87cbf1eca4113daca6b046e0131f27145af7726e868cb2c17983325a6287aa0
   valkey: valkey/valkey:latest
+  worker: ghcr.io/guild-link/worker@sha256:990e8a1ceefd273f8a7108dcc3e54d8b6e18fb342971d2dca18e39cce622091a
 ports:
   compatlink: 80
   hypixel-router: 25565
