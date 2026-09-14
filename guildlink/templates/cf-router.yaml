@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hypixel-router
+  name: cf-router
   labels:
-    app.kubernetes.io/name: hypixel-router
+    app.kubernetes.io/name: cf-router
     app.kubernetes.io/part-of: guildlink
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
-  serviceName: hypixel-router
-  replicas: {{ index .Values.replicas "hypixel-router" }}
+  serviceName: cf-router
+  replicas: {{ index .Values.replicas "cf-router" }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: hypixel-router
+      app.kubernetes.io/name: cf-router
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: hypixel-router
+        app.kubernetes.io/name: cf-router
         app.kubernetes.io/part-of: guildlink
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
@@ -30,7 +30,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: hypixel-router
+        - name: cf-router
           image: {{ index .Values.images "cf-router" }}
           env:
             - name: FORWARDS
@@ -39,7 +39,7 @@ spec:
             - name: minecraft
               containerPort: 25565
           resources:
-            {{- toYaml (index .Values.resources "hypixel-router") | nindent 12 }}
+            {{- toYaml (index .Values.resources "cf-router") | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: /data
@@ -54,7 +54,7 @@ spec:
       metadata:
         name: data
         labels:
-          app.kubernetes.io/name: hypixel-router
+          app.kubernetes.io/name: cf-router
           app.kubernetes.io/part-of: guildlink
           app.kubernetes.io/instance: {{ .Release.Name }}
       spec:
@@ -67,15 +67,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hypixel-router
+  name: cf-router
   labels:
-    app.kubernetes.io/name: hypixel-router
+    app.kubernetes.io/name: cf-router
     app.kubernetes.io/part-of: guildlink
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   selector:
-    app.kubernetes.io/name: hypixel-router
+    app.kubernetes.io/name: cf-router
     app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
-    - port: {{ index .Values.ports "hypixel-router" }}
+    - port: {{ index .Values.ports "cf-router" }}
       targetPort: minecraft

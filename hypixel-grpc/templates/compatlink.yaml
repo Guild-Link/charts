@@ -4,7 +4,7 @@ metadata:
   name: compatlink
   labels:
     app.kubernetes.io/name: compatlink
-    app.kubernetes.io/part-of: guildlink
+    app.kubernetes.io/part-of: hypixel-grpc
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicas.compatlink }}
@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: compatlink
-        app.kubernetes.io/part-of: guildlink
+        app.kubernetes.io/part-of: hypixel-grpc
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       automountServiceAccountToken: false
@@ -52,11 +52,11 @@ metadata:
   name: compatlink
   labels:
     app.kubernetes.io/name: compatlink
-    app.kubernetes.io/part-of: guildlink
+    app.kubernetes.io/part-of: hypixel-grpc
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   selector:
-    app.kubernetes.io/name: compatlink
+    app.kubernetes.io/name: hypixel-grpc
     app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
     - port: {{ .Values.ports.compatlink }}
