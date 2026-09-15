@@ -1,15 +1,13 @@
 images:
   compatlink: ghcr.io/guild-link/compatlink@sha256:2e02b71aa4f3781f1053e1f6580d49d8d146b23594e2c0777ddd4076cd381178
   hypixel-grpc: ""
-
+  cf-router: ghcr.io/guild-link/cf-router@sha256:31e9c319891ccddd6ba5f6da1b1f1028bed7b0de21242f1297fad249e1802b78
 ports:
   hypixel-grpc: 50051
   compatlink: 80
-
 replicas:
-  hypixel-grpc: 1 
+  hypixel-grpc: 1
   compatlink: 1
-
 resources:
   hypixel-grpc:
     requests:
@@ -17,7 +15,6 @@ resources:
       memory: 128Mi
     limits:
       memory: 256Mi
-
   compatlink:
     requests:
       cpu: 100m
