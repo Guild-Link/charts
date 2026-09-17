@@ -1,24 +1,49 @@
 images:
-  cf-router: ghcr.io/guild-link/cf-router@sha256:b03259638788421f93b3008cdd88f4e2227e3e65f177dc1f43c2b49d3f72b9ad
+  guildlink: ghcr.io/guild-link/guildlink@sha256:8c832f300de67d6c5c215a6a7d947bd94642a13c9d446321b62ed0ee29931d57
+  worker-rs: ghcr.io/guild-link/worker-rs@sha256:4897f9d07d0bd151bdb0149d9febe62375bb01649139841c5aacb8e2ea7daf53
   valkey: valkey/valkey:latest
-  worker-rs: ""
-  
+
 ports:
-  cf-router: 25565
   valkey: 6379
 
+config:
+  bot:
+    hypixel_endpoint: ""
+    public_key: ""
+  worker:
+    address: mc.hypixel.net
+    hostname: null
+
+extraEnv:
+  worker: []
+  valkey: []
+  bot: []
+
+extraEnvFrom:
+  worker: []
+  valkey: []
+  bot: []
+
 replicas:
-  compatlink: 1
-  router: 1
+  worker: 1
+  valkey: 1
+  bot: 1
 
 resources:
-  cf-router:
+  bot:
     requests:
       cpu: 100m
-      memory: 32Mi
+      memory: 128Mi
     limits:
-      memory: 64Mi
-      
+      memory: 256Mi
+
+  worker:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
   valkey:
     requests:
       cpu: 100m

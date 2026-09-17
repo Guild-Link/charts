@@ -1,27 +1,24 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ .Release.Name }}-valkey
   labels:
-    {{- include "guildlink.labels" (dict "root" . "component" "valkey") | nindent 4 }}
+    {{- include "hypixel.labels" (dict "root" . "component" "valkey") | nindent 4 }}
 spec:
-  serviceName: {{ .Release.Name }}-valkey
   replicas: {{ .Values.replicas.valkey }}
   selector:
     matchLabels:
-      {{- include "guildlink.selectorLabels" (dict "root" . "component" "valkey") | nindent 6 }}
+      {{- include "hypixel.selectorLabels" (dict "root" . "component" "valkey") | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "guildlink.labels" (dict "root" . "component" "valkey") | nindent 8 }}
+        {{- include "hypixel.labels" (dict "root" . "component" "valkey") | nindent 8 }}
     spec:
       automountServiceAccountToken: false
       securityContext:
-        fsGroupChangePolicy: OnRootMismatch
         runAsNonRoot: true
         runAsGroup: 1000
         runAsUser: 999
-        fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -29,14 +26,16 @@ spec:
           image: {{ .Values.images.valkey }}
           {{- with (index .Values.extraEnv "valkey") }}
           env:
-            {{- include "guildlink.extraEnv" (dict "root" $ "component" "valkey") | nindent 12 }}
+            {{- include "hypixel.extraEnv" (dict "root" $ "component" "valkey") | nindent 12 }}
           {{- end }}
-          {{- include "guildlink.extraEnvFrom" (dict "root" . "component" "valkey") | nindent 10 }}
+          {{- include "hypixel.extraEnvFrom" (dict "root" . "component" "valkey") | nindent 10 }}
           args:
             - --protected-mode
             - "no"
+            - --save
+            - ""
             - --appendonly
-            - "yes"
+            - "no"
           ports:
             - name: valkey
               containerPort: 6379
@@ -48,37 +47,21 @@ spec:
               port: valkey
           resources:
             {{- toYaml .Values.resources.valkey | nindent 12 }}
-          volumeMounts:
-            - name: data
-              mountPath: /data
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
-  volumeClaimTemplates:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: data
-        labels:
-          {{- include "guildlink.labels" (dict "root" . "component" "valkey") | nindent 10 }}
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-valkey
   labels:
-    {{- include "guildlink.labels" (dict "root" . "component" "valkey") | nindent 4 }}
+    {{- include "hypixel.labels" (dict "root" . "component" "valkey") | nindent 4 }}
 spec:
   selector:
-    {{- include "guildlink.selectorLabels" (dict "root" . "component" "valkey") | nindent 4 }}
+    {{- include "hypixel.selectorLabels" (dict "root" . "component" "valkey") | nindent 4 }}
   ports:
     - port: {{ .Values.ports.valkey }}
       targetPort: valkey

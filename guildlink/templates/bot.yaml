@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-bot
+  labels:
+    {{- include "guildlink.labels" (dict "root" . "component" "bot") | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas.bot }}
+  selector:
+    matchLabels:
+      {{- include "guildlink.selectorLabels" (dict "root" . "component" "bot") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "guildlink.labels" (dict "root" . "component" "bot") | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: 1000
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: bot
+          image: {{ .Values.images.guildlink }}
+          env:
+            - name: HYPIXEL_ENDPOINT
+              value: {{ .Values.config.bot.hypixel_endpoint | quote }}
+            - name: PUBLIC_KEY
+              value: {{ .Values.config.bot.public_key | quote }}
+            {{- include "guildlink.extraEnv" (dict "root" . "component" "bot") | nindent 12 }}
+          {{- include "guildlink.extraEnvFrom" (dict "root" . "component" "bot") | nindent 10 }}
+          resources:
+            {{- toYaml .Values.resources.bot | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

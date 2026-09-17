@@ -1,24 +1,19 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: cf-router
+  name: {{ .Release.Name }}-router
   labels:
-    app.kubernetes.io/name: cf-router
-    app.kubernetes.io/part-of: guildlink
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "hypixel.labels" (dict "root" . "component" "router") | nindent 4 }}
 spec:
-  serviceName: cf-router
-  replicas: {{ index .Values.replicas "cf-router" }}
+  serviceName: {{ .Release.Name }}-router
+  replicas: {{ .Values.replicas.router }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: cf-router
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "hypixel.selectorLabels" (dict "root" . "component" "router") | nindent 6 }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: cf-router
-        app.kubernetes.io/part-of: guildlink
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "hypixel.labels" (dict "root" . "component" "router") | nindent 8 }}
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -30,16 +25,18 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: cf-router
+        - name: router
           image: {{ index .Values.images "cf-router" }}
           env:
             - name: FORWARDS
-              value: "0.0.0.0:25565=mc.hypixel.net:25565"
+              value: "0.0.0.0:{{ .Values.ports.router }}={{ .Values.config.router.server_endpoint }}"
+            {{- include "hypixel.extraEnv" (dict "root" . "component" "router") | nindent 12 }}
+          {{- include "hypixel.extraEnvFrom" (dict "root" . "component" "router") | nindent 10 }}
           ports:
             - name: minecraft
-              containerPort: 25565
+              containerPort: {{ .Values.ports.router }}
           resources:
-            {{- toYaml (index .Values.resources "cf-router") | nindent 12 }}
+            {{- toYaml .Values.resources.router | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: /data
@@ -54,9 +51,7 @@ spec:
       metadata:
         name: data
         labels:
-          app.kubernetes.io/name: cf-router
-          app.kubernetes.io/part-of: guildlink
-          app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- include "hypixel.labels" (dict "root" . "component" "router") | nindent 10 }}
       spec:
         accessModes:
           - ReadWriteOnce
@@ -67,15 +62,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cf-router
+  name: {{ .Release.Name }}-router
   labels:
-    app.kubernetes.io/name: cf-router
-    app.kubernetes.io/part-of: guildlink
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "hypixel.labels" (dict "root" . "component" "router") | nindent 4 }}
 spec:
   selector:
-    app.kubernetes.io/name: cf-router
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "hypixel.selectorLabels" (dict "root" . "component" "router") | nindent 4 }}
   ports:
-    - port: {{ index .Values.ports "cf-router" }}
+    - port: {{ .Values.ports.router }}
       targetPort: minecraft

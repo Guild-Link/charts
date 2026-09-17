@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-api
+  labels:
+    {{- include "hypixel.labels" (dict "root" . "component" "api") | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas.api }}
+  selector:
+    matchLabels:
+      {{- include "hypixel.selectorLabels" (dict "root" . "component" "api") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "hypixel.labels" (dict "root" . "component" "api") | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: 1000
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: {{ index .Values.images "hypixel-grpc" }}
+          env:
+            - name: COMPATLINK_URL
+              value: "http://{{ .Release.Name }}-compat-api:{{ index .Values.ports "compat-api" }}"
+            - name: VALKEY_URL
+              value: "redis://{{ .Release.Name }}-valkey:{{ .Values.ports.valkey }}/"
+            {{- include "hypixel.extraEnv" (dict "root" . "component" "api") | nindent 12 }}
+          {{- include "hypixel.extraEnvFrom" (dict "root" . "component" "api") | nindent 10 }}
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.ports.api }}
+          readinessProbe:
+            tcpSocket:
+              port: grpc
+          livenessProbe:
+            tcpSocket:
+              port: grpc
+          resources:
+            {{- toYaml .Values.resources.api | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-api
+  labels:
+    {{- include "hypixel.labels" (dict "root" . "component" "api") | nindent 4 }}
+spec:
+  selector:
+    {{- include "hypixel.selectorLabels" (dict "root" . "component" "api") | nindent 4 }}
+  ports:
+    - port: {{ .Values.ports.api }}
+      targetPort: grpc

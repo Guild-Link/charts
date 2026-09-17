@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-compat-api
+  labels:
+    {{- include "hypixel.labels" (dict "root" . "component" "compat-api") | nindent 4 }}
+spec:
+  replicas: {{ (index .Values.replicas "compat-api") }}
+  selector:
+    matchLabels:
+      {{- include "hypixel.selectorLabels" (dict "root" . "component" "compat-api") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "hypixel.labels" (dict "root" . "component" "compat-api") | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: 1000
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: compat-api
+          image: {{ .Values.images.compatlink }}
+          {{- with (index .Values.extraEnv "compat-api") }}
+          env:
+            {{- include "hypixel.extraEnv" (dict "root" $ "component" "compat-api") | nindent 12 }}
+          {{- end }}
+          {{- include "hypixel.extraEnvFrom" (dict "root" . "component" "compat-api") | nindent 10 }}
+          ports:
+            - name: http
+              containerPort: 3000
+          readinessProbe:
+            tcpSocket:
+              port: http
+          livenessProbe:
+            tcpSocket:
+              port: http
+          resources:
+            {{- toYaml (index .Values.resources "compat-api") | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-compat-api
+  labels:
+    {{- include "hypixel.labels" (dict "root" . "component" "compat-api") | nindent 4 }}
+spec:
+  selector:
+    {{- include "hypixel.selectorLabels" (dict "root" . "component" "compat-api") | nindent 4 }}
+  ports:
+    - port: {{ (index .Values.ports "compat-api") }}
+      targetPort: http

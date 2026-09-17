@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-worker
+  labels:
+    {{- include "guildlink.labels" (dict "root" . "component" "worker") | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas.worker }}
+  selector:
+    matchLabels:
+      {{- include "guildlink.selectorLabels" (dict "root" . "component" "worker") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "guildlink.labels" (dict "root" . "component" "worker") | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: 1000
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: worker
+          image: {{ index .Values.images "worker-rs" }}
+          env:
+            - name: VALKEY_URL
+              value: "redis://{{ .Release.Name }}-valkey:{{ .Values.ports.valkey }}/"
+            - name: ADDRESS
+              value: {{ .Values.config.worker.address | quote }}
+            {{- with .Values.config.worker.hostname }}
+            - name: HOSTNAME
+              value: {{ . | quote }}
+            {{- end }}
+            {{- include "guildlink.extraEnv" (dict "root" . "component" "worker") | nindent 12 }}
+          {{- include "guildlink.extraEnvFrom" (dict "root" . "component" "worker") | nindent 10 }}
+          resources:
+            {{- toYaml .Values.resources.worker | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
