@@ -1,11 +1,9 @@
 images:
-  guildlink: ghcr.io/guild-link/guildlink@sha256:8c832f300de67d6c5c215a6a7d947bd94642a13c9d446321b62ed0ee29931d57
+  guildlink: ghcr.io/guild-link/guildlink@sha256:b5d41e4527dbc6293108fdc246c73a17cf2967be26336ded51ac4a8d5ede5b2b
   worker-rs: ghcr.io/guild-link/worker-rs@sha256:4897f9d07d0bd151bdb0149d9febe62375bb01649139841c5aacb8e2ea7daf53
   valkey: valkey/valkey:latest
-
 ports:
   valkey: 6379
-
 config:
   bot:
     hypixel_endpoint: ""
@@ -13,22 +11,18 @@ config:
   worker:
     address: mc.hypixel.net
     hostname: null
-
 extraEnv:
   worker: []
   valkey: []
   bot: []
-
 extraEnvFrom:
   worker: []
   valkey: []
   bot: []
-
 replicas:
   worker: 1
   valkey: 1
   bot: 1
-
 resources:
   bot:
     requests:
@@ -36,14 +30,12 @@ resources:
       memory: 128Mi
     limits:
       memory: 256Mi
-
   worker:
     requests:
       cpu: 100m
       memory: 128Mi
     limits:
       memory: 256Mi
-
   valkey:
     requests:
       cpu: 100m
