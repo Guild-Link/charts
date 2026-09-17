@@ -1,7 +1,7 @@
 images:
   hypixel-grpc: ghcr.io/guild-link/hypixel-grpc@sha256:dd9311442fcd6f78ebe1a071c716cccdfdd315f68be373228032aed8c4905e22
   compatlink: ghcr.io/guild-link/compatlink@sha256:8701e7f4c01b2cfd24b1bf14c17744cf39f159e89a10a4c02e0d232bf8544f45
-  cf-router: ghcr.io/guild-link/cf-router@sha256:b03259638788421f93b3008cdd88f4e2227e3e65f177dc1f43c2b49d3f72b9ad
+  cf-router: ghcr.io/guild-link/cf-router@sha256:f5b96751b2a9a3a84df83afac390cb501c8be42cc9b48d6af3d77e4023c81297
   valkey: valkey/valkey:latest
 ports:
   compat-api: 80
