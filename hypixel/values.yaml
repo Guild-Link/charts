@@ -1,37 +1,31 @@
 images:
   hypixel-grpc: ghcr.io/guild-link/hypixel-grpc@sha256:b117c5d246f99a0916203545afc4c89a6a7f53bf1442c96c0cb80d560acee657
-  compatlink: ghcr.io/guild-link/compatlink@sha256:2e02b71aa4f3781f1053e1f6580d49d8d146b23594e2c0777ddd4076cd381178
+  compatlink: ghcr.io/guild-link/compatlink@sha256:8701e7f4c01b2cfd24b1bf14c17744cf39f159e89a10a4c02e0d232bf8544f45
   cf-router: ghcr.io/guild-link/cf-router@sha256:b03259638788421f93b3008cdd88f4e2227e3e65f177dc1f43c2b49d3f72b9ad
   valkey: valkey/valkey:latest
-
 ports:
   compat-api: 80
   router: 25565
   valkey: 6379
   api: 50051
-
 config:
   router:
     server_endpoint: mc.hypixel.net:25565
-
 extraEnv:
   api: []
   compat-api: []
   router: []
   valkey: []
-
 extraEnvFrom:
   compat-api: []
   router: []
   valkey: []
   api: []
-
 replicas:
   compat-api: 1
   router: 1
   valkey: 1
   api: 1
-
 resources:
   api:
     requests:
@@ -39,21 +33,18 @@ resources:
       memory: 128Mi
     limits:
       memory: 256Mi
-
   compat-api:
     requests:
       cpu: 100m
       memory: 128Mi
     limits:
       memory: 256Mi
-
   router:
     requests:
       cpu: 100m
       memory: 32Mi
     limits:
       memory: 64Mi
-
   valkey:
     requests:
       cpu: 50m
