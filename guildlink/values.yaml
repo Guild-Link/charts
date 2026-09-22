@@ -24,21 +24,21 @@ replicas:
   valkey: 1
   bot: 1
 resources:
-  bot:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      memory: 256Mi
   worker:
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 64Mi
     limits:
-      memory: 256Mi
+      memory: 128Mi
+  bot:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
   valkey:
     requests:
-      cpu: 100m
-      memory: 512Mi
+      cpu: 50m
+      memory: 64Mi
     limits:
-      memory: 1024Mi
+      memory: 128Mi
