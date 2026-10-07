@@ -6,6 +6,8 @@ metadata:
     {{- include "guildlink.labels" (dict "root" . "component" "bot") | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas.bot }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "guildlink.selectorLabels" (dict "root" . "component" "bot") | nindent 6 }}
@@ -27,8 +29,14 @@ spec:
           env:
             - name: HYPIXEL_ENDPOINT
               value: {{ .Values.config.bot.hypixel_endpoint | quote }}
-            - name: PUBLIC_KEY
-              value: {{ .Values.config.bot.public_key | quote }}
+            - name: VALKEY_ADDRESS
+              value: "{{ .Release.Name }}-valkey:6379"
+            - name: MC_AUTH_ENDPOINT
+              value: {{ .Values.config.bot.mc_auth_endpoint | quote }}
+            - name: MC_AUTH_SIGKEY
+              value: {{ .Values.config.bot.mc_auth_sigkey | quote }}
+            - name: MC_AUTH_ENCKEY
+              value: {{ .Values.config.bot.mc_auth_enckey | quote }}
             {{- include "guildlink.extraEnv" (dict "root" . "component" "bot") | nindent 12 }}
           {{- include "guildlink.extraEnvFrom" (dict "root" . "component" "bot") | nindent 10 }}
           resources:

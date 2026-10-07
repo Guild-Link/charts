@@ -56,5 +56,5 @@ spec:
   selector:
     {{- include "hypixel.selectorLabels" (dict "root" . "component" "compat-api") | nindent 4 }}
   ports:
-    - port: {{ (index .Values.ports "compat-api") }}
+    - port: 80
       targetPort: http

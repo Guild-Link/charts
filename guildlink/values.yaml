@@ -2,15 +2,15 @@ images:
   guildlink: ghcr.io/guild-link/guildlink@sha256:b5d41e4527dbc6293108fdc246c73a17cf2967be26336ded51ac4a8d5ede5b2b
   worker-rs: ghcr.io/guild-link/worker-rs@sha256:6c4e52696ed66fa792d7f39017693676be2da6b553a17a9fcebe3a56bd4d86f9
   valkey: valkey/valkey:latest
-ports:
-  valkey: 6379
 config:
   bot:
+    mc_auth_endpoint: "https://mc-auth.chickeniq.net"
     hypixel_endpoint: ""
-    public_key: ""
+    mc_auth_sigkey: "M5qAL6Bi4XPgHuYVcUe9No0witldOPEbCRmzEZn7Fdg="
+    mc_auth_enckey: ""
   worker:
+    hostname: mc.hypixel.net
     address: mc.hypixel.net
-    hostname: null
 extraEnv:
   worker: []
   valkey: []
@@ -21,7 +21,6 @@ extraEnvFrom:
   bot: []
 replicas:
   worker: 1
-  valkey: 1
   bot: 1
 resources:
   worker:

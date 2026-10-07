@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "hypixel.labels" (dict "root" . "component" "valkey") | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicas.valkey }}
+  replicas: 1
   selector:
     matchLabels:
       {{- include "hypixel.selectorLabels" (dict "root" . "component" "valkey") | nindent 6 }}
@@ -63,5 +63,5 @@ spec:
   selector:
     {{- include "hypixel.selectorLabels" (dict "root" . "component" "valkey") | nindent 4 }}
   ports:
-    - port: {{ .Values.ports.valkey }}
+    - port: 6379
       targetPort: valkey

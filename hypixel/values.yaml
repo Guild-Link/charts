@@ -3,11 +3,6 @@ images:
   compatlink: ghcr.io/guild-link/compatlink@sha256:6497e2fc808e6a0f82e67de80d9fbd1b3ca7e113945f43fdb9553d132ab7cb0d
   cf-router: ghcr.io/guild-link/cf-router@sha256:93ea1cc67da61b932de9e7e31c019dd090f2b62a3f49955080665c031a502aae
   valkey: valkey/valkey:latest
-ports:
-  compat-api: 80
-  router: 25565
-  valkey: 6379
-  api: 50051
 config:
   router:
     server_endpoint: mc.hypixel.net:25565
@@ -24,7 +19,6 @@ extraEnvFrom:
 replicas:
   compat-api: 1
   router: 1
-  valkey: 1
   api: 1
 resources:
   valkey:

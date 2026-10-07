@@ -29,12 +29,12 @@ spec:
           image: {{ index .Values.images "cf-router" }}
           env:
             - name: FORWARDS
-              value: "0.0.0.0:{{ .Values.ports.router }}={{ .Values.config.router.server_endpoint }}"
+              value: "0.0.0.0:25565={{ .Values.config.router.server_endpoint }}"
             {{- include "hypixel.extraEnv" (dict "root" . "component" "router") | nindent 12 }}
           {{- include "hypixel.extraEnvFrom" (dict "root" . "component" "router") | nindent 10 }}
           ports:
             - name: minecraft
-              containerPort: {{ .Values.ports.router }}
+              containerPort: 25565
           resources:
             {{- toYaml .Values.resources.router | nindent 12 }}
           volumeMounts:
@@ -69,5 +69,5 @@ spec:
   selector:
     {{- include "hypixel.selectorLabels" (dict "root" . "component" "router") | nindent 4 }}
   ports:
-    - port: {{ .Values.ports.router }}
+    - port: 25565
       targetPort: minecraft
