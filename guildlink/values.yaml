@@ -1,6 +1,6 @@
 images:
   guildlink: ghcr.io/guild-link/guildlink@sha256:b5d41e4527dbc6293108fdc246c73a17cf2967be26336ded51ac4a8d5ede5b2b
-  worker-rs: ghcr.io/guild-link/worker-rs@sha256:3d5979fcd1856f063548dd7abfc04d71743516c4fb83602d161fa95a8ea48ace
+  worker-rs: ghcr.io/guild-link/worker-rs@sha256:8885dfdbbb5ff0bb061576d3f339766e6000c2d2825f954db4b1d30824453937
   valkey: valkey/valkey:latest
 config:
   bot:
