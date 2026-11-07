@@ -1,5 +1,5 @@
 images:
-  guildlink: ghcr.io/guild-link/guildlink@sha256:970401685b36a1c12b22330ce4489a046e706372318e66dd0a4ea56cfae3cd1f
+  guildlink: ghcr.io/guild-link/guildlink@sha256:07042f4c09905bac98ddab95d74c46a66fa02deea2661fd6316ad7c5dae1b147
   worker-rs: ghcr.io/guild-link/worker-rs@sha256:3246734f2ec1a5e022d29048dcaf2fc4f1b6d892485091e3b2f252a681a8bc05
   valkey: valkey/valkey:latest
 config:
