@@ -14,7 +14,7 @@ jobs:
       github.event.issue.pull_request &&
       github.event.comment.body == '/rebuild' &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v7
         with:
